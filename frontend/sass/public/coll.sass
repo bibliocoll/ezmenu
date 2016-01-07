@@ -1,0 +1,150 @@
+//@import ../reset
+@import ../font
+@import ../common
+
+$maincol: $collcol
+$secondcol: white
+
+=titledeco
+  +roboreg
+  text-transform: uppercase
+  font-size: x-small
+  letter-spacing: 1em
+  position: absolute
+  left: 0
+  width: 100%
+  text-align: center
+
+*
+  padding: 0
+  margin: 0
+  border: 0
+  outline: 0
+  text-indent: 0
+
+body
+  position: relative
+  +roboreg
+  width: 100%
+  height: 100%
+  min-height: 100%
+
+a
+  text-decoration: none
+  color: $collcol
+  &:hover
+    text-decoration: underline
+
+.centered
+  text-align: center
+
+.bordered
+  border: 1px solid $maincol
+  border-radius: 36px
+  //padding: 36px 4%
+  width: 80%
+  margin: 10px auto
+  p
+    padding: 1em 2em
+  p + p
+    padding: 0em 2em 1em
+  ul
+    padding: 0em 2em
+    list-style: circle
+
+#erklaerbaer
+  text-align: justify
+  a.external, span.external
+    padding-right: 13px
+    background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtODI2LjQyOSAtNjk4Ljc5MSkiPjxyZWN0IHdpZHRoPSI1Ljk4MiIgaGVpZ2h0PSI1Ljk4MiIgeD0iODI2LjkyOSIgeT0iNzAyLjMwOSIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMDZjIi8+PGc+PHBhdGggZD0iTTgzMS4xOTQgNjk4Ljc5MWg1LjIzNHY1LjM5MWwtMS41NzEgMS41NDUtMS4zMS0xLjMxLTIuNzI1IDIuNzI1LTIuNjg5LTIuNjg5IDIuODA4LTIuODA4LTEuMzExLTEuMzExeiIgZmlsbD0iIzA2ZiIvPjxwYXRoIGQ9Ik04MzUuNDI0IDY5OS43OTVsLjAyMiA0Ljg4NS0xLjgxNy0xLjgxNy0yLjg4MSAyLjg4MS0xLjIyOC0xLjIyOCAyLjg4MS0yLjg4MS0xLjg1MS0xLjg1MXoiIGZpbGw9IiNmZmYiLz48L2c+PC9nPjwvc3ZnPg==") 99% 50% no-repeat
+
+#coll-ident
+  +slabbold
+  +clearfix
+  font-size: 10px
+  margin-top: 1em
+  color: $maincol
+  background-color: white
+  h1
+    padding-top: 1em
+  img
+    padding: 0.5em
+    float: left
+
+#go-ident
+  margin-bottom: 2em
+  h2
+    +slabbold
+    font-size: 8em
+    position: relative
+    color: $maincol
+    &::before
+      +titledeco
+      top: 1.7em
+      content: attr(data-contentbefore)
+    &::after
+      +titledeco
+      bottom: 1.3em
+      content: attr(data-contentafter)
+
+#login-widget
+  padding: 1.25em 0
+  position: relative
+  label
+    position: relative
+    margin: auto
+  input
+    position: relative
+    height: 1.6em
+    line-height: 1.6em
+    border-radius: 1.6em
+    border: 0
+    padding: 0 0.8em
+    margin: 1em
+    background-color: rgba($collcol, 0.1)
+    &:focus
+      box-shadow: 0 0 5px 0 #ddd
+    &#go-button
+      +hoverglow
+      height: 1.6em
+      line-height: 1.6em
+      border-radius: 1.6em
+      width: 60%
+
+@keyframes wiggle
+  from
+    text-indent: 0.6em
+  to
+    text-indent: 0
+
+#menu-hint
+  position: fixed
+  top: 82%
+  left: 2.5em
+  height: 3em
+  vertical-align: middle
+  transform: rotate(-0.25turn)
+  transform-origin: left center
+  width: 35em
+  &::before
+    display: inline-block
+    width: 2.4em
+    content: "\21E6"
+    font-size: x-large
+    animation-name: wiggle
+    animation-duration: 1s
+    animation-iteration-count: infinite
+    animation-direction: alternate
+
+@keyframes pulsate
+  from
+    background-color: rgba($collcol, 0.1)
+  to
+    background-color: rgba($collcol, 0.3)
+#ezmenu-button
+  animation-name: pulsate
+  animation-duration: 1s
+  animation-iteration-count: infinite
+  animation-direction: alternate
+  &:hover
+    animation-name: none

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>EZMenu Hot Reload</title>
+<script src="jspm_packages/system.js"></script>
+<script src="config.js"></script>
+<script>
+if (location.origin.match(/localhost/)) {
+  System.trace = true
+  System.import('capaj/systemjs-hot-reloader').then(function(HotReloader){
+    new HotReloader.default('http://localhost:9080')
+  })
+}
+</script>
+ <script>
+   System.import('js/ezmenu/main.js');
+ </script>
+</head>
+<body>
+EZMenu Hot Reload dev page.
+</body>
+</html>

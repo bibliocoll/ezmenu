@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>GO: Not Authorized</title>
+<link rel="stylesheet" type="text/css" href="/public/coll.css">
+</head>
+<body>
+<div id="coll-ident" class="bordered centered">
+    <h1>Library Logo<br />goes here</h1>
+</div>
+<div id="go-ident" class="centered">
+    <h2 id="go-logo" class="centered" data-contentbefore="grab that paper" data-contentafter="on the run">GO</h2>
+</div>
+<div class="bordered" id="erklaerbaer">
+    <p>
+The resource you selected is unavailable to the account you logged in with.<br />
+You can log in with a different user below.
+    </p>
+</div>
+<div id="login-widget" class="bordered centered">
+    <form action="/login" method="post" id="loginform">
+        <input type="hidden" name="url" value="^U" />
+        <label for="userId">username<input type="text" name="user" id="userId" /></label><br />
+        <label for="passWord">password<input type="password" name="pass" id="passWord" /></label><br />
+        <input id="go-button" type="submit" value="GO" />
+    </form>
+</div>
+</body>
+</html>

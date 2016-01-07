@@ -1,0 +1,53 @@
+$collcol: rgb(0,66,99)
+
+=robobold
+  font:
+    family: Roboto, Helvetica, sans-serif
+    weight: bold
+=roboreg
+  font:
+    family: Roboto, Helvetica, sans-serif
+    weight: normal
+=slabbold
+  font:
+    family: 'Roboto Slab', Rockwell, serif
+    weight: bold
+=slablight
+  font:
+    family: 'Roboto Slab', Rockwell, serif
+    weigth: light
+
+=clearfix
+  &::after
+    content: ""
+    display: table
+    clear: both
+
+=hoverglow
+  transition: all 500ms ease-out
+  &:hover
+    background-color: $collcol
+    color: white
+    text-decoration: none
+    text-shadow: 0 0 1em white
+    a
+      color: white
+      text-decoration: none
+      text-shadow: 0 0 1em white
+
+form.core-search
+  text-align: center
+  #lookfor, #defaultSearchButton
+    padding: 0 0.75em
+    height: 1.6em
+    line-height: 1.6em
+    border: none
+    vertical-align: middle
+  #lookfor
+    border-radius: 1.6em 0 0 1.6em
+    width: 70%
+  #defaultSearchButton
+    +slabbold
+    +hoverglow
+    border-radius: 0 1.6em 1.6em 0
+    width: 20%

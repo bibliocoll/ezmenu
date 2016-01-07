@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>GO: HTTPS required for this connection</title>
+<link rel="stylesheet" type="text/css" href="/public/coll.css">
+<script type="text/javascript" src="/loggedin/injectmenu.js" defer="defer"></script>
+</head>
+<body>
+<div id="coll-ident" class="bordered centered">
+    <h1>Library Logo<br />goes here</h1>
+</div>
+<div id="go-ident" class="centered">
+    <h2 id="go-logo" class="centered" data-contentbefore="grab that paper" data-contentafter="on the run">GO</h2>
+</div>
+<div class="bordered" id="erklaerbaer">
+    <p>
+    <strong>Ooops, that went wrong.</strong>
+    You chose to connect to a website via HTTP that we only proxy in its HTTPS version.
+    If you got to this page by clicking on a link in the menu, we definitely want to
+    know about it so we can fix the problem. Please contact a librarian and tell her how this happened.
+    </p><p>
+    <strong>Contact:</strong> Ask a librarian :)
+    </p>
+</div>
+<div id="core-search" class="centered">
+    <form method="GET" action="http://core.coll.mpg.de.ezproxy.coll.mpg.de/Search/Results" name="searchForm" id="searchForm" class="core-search">
+        <input id="lookfor" name="lookfor" value="" placeholder="Search in CORE" type="text">
+        <input id="defaultSearchButton" name="submitButton" value="GO" type="submit">
+    </form>
+</div>
+<div id="menu-hint">
+    There should be a button around here somewhere, go <noscript><strong>turn on javascript, reload</strong> and then</noscript> click it!
+</div>
+</body>
+</html>
