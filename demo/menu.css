@@ -10,7 +10,7 @@ form.core-search {
     border-radius: 1.6em 0 0 1.6em;
     width: 70%; }
   form.core-search #defaultSearchButton {
-    font-family: "Roboto Slab", Rockwell, serif;
+    font-family: 'Roboto Slab', Rockwell, serif;
     font-weight: bold;
     transition: all 500ms ease-out;
     border-radius: 0 1.6em 1.6em 0;
@@ -29,12 +29,13 @@ form.core-search {
   display: none; }
 
 nav#ezmenu-menu {
-  text-align: left;
   text-indent: 0;
+  text-align: left;
   text-transform: none;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 400;
+  font-family: Roboto, Helvetica, sans-serif;
+  font-weight: normal;
   font-variant: normal;
   font-kerning: 0;
   letter-spacing: 0;
@@ -49,13 +50,13 @@ nav#ezmenu-menu {
   font-family: Roboto, Helvetica, sans-serif;
   font-weight: normal; }
   nav#ezmenu-menu .mm-divider, nav#ezmenu-menu .mm-indexer a, nav#ezmenu-menu .mm-title {
-    font-family: "Roboto Slab", Rockwell, serif;
+    font-family: 'Roboto Slab', Rockwell, serif;
     font-weight: bold;
     color: #004263; }
   nav#ezmenu-menu .mm-divider, nav#ezmenu-menu input {
     background-color: rgba(0, 66, 99, 0.1); }
   nav#ezmenu-menu .mm-counter {
-    font-family: "Roboto Slab", Rockwell, serif;
+    font-family: 'Roboto Slab', Rockwell, serif;
     font-weigth: light;
     color: #004263; }
   nav#ezmenu-menu .mm-listview > li::after, nav#ezmenu-menu .mm-navbar {
@@ -80,10 +81,10 @@ nav#ezmenu-menu {
   nav#ezmenu-menu #go-librecommended li span {
     text-shadow: 0 0 1em white;
     padding-left: 4.25em; }
-    nav#ezmenu-menu #go-librecommended li span.logo-coll {
-      background: url(coll.png) -1em center no-repeat; }
-    nav#ezmenu-menu #go-librecommended li span.logo-minerva {
-      background: url(minerva.png) -1em center no-repeat; }
+    nav#ezmenu-menu #go-librecommended li span.logo-one {
+      background: url(one.png) -1em center no-repeat; }
+    nav#ezmenu-menu #go-librecommended li span.logo-two {
+      background: url(two.png) -1em center no-repeat; }
 
 #ezmenu-button {
   transition: all 500ms ease-out;
@@ -108,7 +109,7 @@ nav#ezmenu-menu {
       text-decoration: none;
       text-shadow: 0 0 1em white; }
   #ezmenu-button a {
-    font-family: "Roboto Slab", Rockwell, serif;
+    font-family: 'Roboto Slab', Rockwell, serif;
     font-weight: bold;
     text-decoration: none;
     line-height: 3.3em;
@@ -118,4 +119,5 @@ nav#ezmenu-menu {
     height: 100%;
     border: none; }
 
-/*# sourceMappingURL=menu.css.map */
+div#bo_contentwrapper.bo_column-layout-3 {
+  margin-top: 165px; }

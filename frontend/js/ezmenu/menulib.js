@@ -156,7 +156,7 @@ export function addSubmenu(item) {
 				let $submenu = jQ(finished_submenu)
 					.appendTo(item['$li'])
 					// call mmenuapi.init() on the ul we just added into the DOM
-				item['mmenuapi'].init($submenu)
+				item['mmenuapi'].initPanels($submenu)
 				return item
 			})
 	})

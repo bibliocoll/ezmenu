@@ -9,18 +9,18 @@
 
 // ~~~~~~~~~~~~~~~~ MAIN & COMMON ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-// XXX: switch this our for deployment / local testing. for production, this needs to be the FQDN of your EZProxy
+// XXX: switch this out for deployment / local testing. for production, this needs to be the FQDN of your EZProxy
 // export const PROXY_HOSTNAME = 'go.coll.mpg.de'
 export const PROXY_HOSTNAME = 'localhost'
 
 // XXX: switch for deployment / local testing
-// export const BASE_URL = 'https://' + PROXY_HOSTNAME + '/loggedin/'
+// export const BASE_URL = 'https://' + PROXY_HOSTNAME + '/'
 export const BASE_URL = 'http://' + PROXY_HOSTNAME + ':8000/'
 
 // ~~~~~~~~~~~~~~~~ MENU LIB ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // XXX: switch for deployment / local testing
-// export const IMPLANT_URL = BASE_URL + 'implant.htm'
+// export const IMPLANT_URL = BASE_URL + 'loggedin/implant.htm'
 export const IMPLANT_URL = BASE_URL + 'demo_implant.html'
 
 // CSS ID of the main menu <ul>

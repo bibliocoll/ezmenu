@@ -9,13 +9,13 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "htmlsrv": "^1.2.1",
-    "jspm": "^0.16.19",
-    "node-sass": "^3.4.2"
+    "jspm": "^0.16.0",
+    "node-http-server": "^6.2.1",
+    "node-sass": "^3.10.0"
   },
   "scripts": {
     "postinstall": "jspm install",
-    "start": "node-sass -w frontend/sass/loggedin/menu.sass -o demo/ & SRV=demo htmlsrv",
+    "start": "node-sass -w frontend/sass/loggedin/menu.sass -o demo/ & node tooling/demoserver.js",
     "build": "tooling/build.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -39,16 +39,16 @@
     "directories": {},
     "configFile": "tooling/config.js",
     "dependencies": {
-      "BeSite/jQuery.mmenu": "github:FrDH/jQuery.mmenu@^5.5.3",
-      "domready": "npm:domready@^1.0.8",
-      "es6-promise": "npm:es6-promise@^3.0.2",
-      "jquery": "github:components/jquery@^2.1.4",
-      "whatwg-fetch": "npm:whatwg-fetch@^0.10.1"
+      "BeSite/jQuery.mmenu": "github:FrDH/jQuery.mmenu@^5.7.0",
+      "domready": "npm:domready@^1.0.0",
+      "es6-promise": "npm:es6-promise@^4.0.0",
+      "jquery": "github:components/jquery@^3.1.0",
+      "whatwg-fetch": "npm:whatwg-fetch@^1.0.0"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",
       "babel-runtime": "npm:babel-runtime@^5.8.24",
-      "capaj/systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@^0.5.1",
+      "capaj/systemjs-hot-reloader": "github:capaj/systemjs-hot-reloader@^0.6.0",
       "core-js": "npm:core-js@^1.1.4"
     }
   }
