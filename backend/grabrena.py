@@ -98,11 +98,6 @@ class LoginError(GrabrenaError):
     pass
 
 
-class NoJsonpError(GrabrenaError):
-        '''data expected to be JSONP is malformed'''
-        pass
-
-
 # ~~~ OTHER CLASSES  ~~~
 class EZProxyStanza(object):
     def __init__(self, prequel, title, mimefilter, url, other_lines, *script_filename):
@@ -245,29 +240,6 @@ by http://stackoverflow.com/users/4279/j-f-sebastian
 
 
 # ~~~ FUNCTIONS ~~~
-def jsonp_to_json(data, fn_name=None):
-    '''extract json object from jsonp string, using OrderedDict for object pairs'''
-    if data[-2:] != ');':
-        raise NoJsonpError('JSONP string did not end with ");"')
-    if fn_name is None:
-        try:
-            fn_open = data.index('(')
-            p = re.compile('\w+')
-            if p.match(data[:fn_open]):
-                return json.loads(data[fn_open+1:-2], object_pairs_hook=collections.OrderedDict)
-            else:
-                raise NoJsonpError(''.join(['JSONP string started with fishy function name: "',
-                                            data[:fn_open], '")']))
-        except ValueError:
-            raise NoJsonpError('JSONP string did not start with function name and opening bracket')
-    else:
-        if data[:len(fn_name)+1] == ''.join([fn_name, '(']):
-            return json.loads(data[len(fn_name)+1:-2], object_pairs_hook=collections.OrderedDict)
-        else:
-            raise NoJsonpError(''.join(['JSONP string did not start with provided function name ("',
-                                        fn_name, '")']))
-
-
 def json_hexdigest(data):
     '''creates a sha1 hash of the json representation of an object'''
     newsha = hashlib.sha1()
@@ -296,6 +268,10 @@ def good_rena_entries_to_array(entries):
         list_item['free'] = rena_entry['access_txtF'] == 'FREE'
         if 'description' in rena_entry:
             list_item['desc'] = rena_entry['description']
+        for h1_host in grcfg['highlight1'].split(';'):
+            if h1_host in list_item['url']:
+                list_item['highlight1'] = True
+
 
         # NOTE: this is the place where you can ferry more ReNa data over to the javascript side
         # common fields you could use:
@@ -512,6 +488,8 @@ with requests.Session() as s:
         except requests.exceptions.RequestException as e:
             print('\tOops, network error: ', e.args)
             print('\ttrying to work with on-disk list...')
+        except Exception as e:
+            print('\tError while requesting data from ReNa: ', e.args)
         try:
             with open(''.join([grcfg['js_outdir'], 'setlist.json']), 'r') as setfile:
                 old_setlist = json.load(setfile, object_pairs_hook=collections.OrderedDict)
@@ -528,11 +506,6 @@ with requests.Session() as s:
             need_to_write_setlist = True
             if len(rena_setdict) == 0:
                 raise NoSetlistError('Connection to ReNa failed & no local setlist.json file. Aborting')
-        except NoJsonpError:
-            print('\tOld setlist file faulty, starting from scratch')
-            need_to_write_setlist = True
-            if len(rena_setdict) == 0:
-                raise NoSetlistError('Connection to ReNa failed & local setlist.json file faulty. Aborting')
 
         # ~~~ GET EACH COLLECTION FROM RENA ~~~
         if len(rena_setdict) > len(old_setdict):
@@ -557,9 +530,9 @@ with requests.Session() as s:
                 print("\tWe don't have a local copy of this one yet")
 
             # query ReNa for this collection
-            r2 = s.get(renaset['url'], params={'view': 'JSONP', 'callback': ''.join([OUT_FNNAME, set_id])})
+            r2 = s.get(renaset['url'], params={'view': 'JSON'})
             r2.raise_for_status()
-            newdata_json = jsonp_to_json(r2.text, ''.join([OUT_FNNAME, set_id]))
+            newdata_json = r2.json()
             timestamp = str(int(time.time()))
             data_list = good_rena_entries_to_array(newdata_json)
             new_digest = json_hexdigest(data_list)

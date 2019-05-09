@@ -9,6 +9,28 @@ Links to proxied resources are presented in a [jQuery.mmenu],
 which is injected into all pages visited via the proxy server.
 
 
+## Version History
+
+* 0.1.3: ReNa-Backend uses JSON instead of JSONP (Q2 2019)
+* 0.1.2: demo server (Q3 2016)
+* 0.1.1: dependency updates, some css changes (Q3 2016)
+* 0.1.0: initial release (Q2 2016)
+
+### Planned changes
+
+* 0.1.4: ReNa v4 compatibility (Q2 2019)
+* 0.1.5: use the no-jQuery version of `mmenu` (sometime 2019)
+
+
+### To Do, Help Wanted:
+
+* Refactor grabrena.py until the salient parts can be used stand-alone
+* Sanitize network interactions for XSS vectors (somewhat done?)
+* Loading fonts from the EZProxy webserver fails due to lack of CORS headers
+* Automate and document the build process more cleanly, or rather: migrate to another build toolchain before jspm dies of bitrot
+* Better error handling/messages
+* LocalStorage for JS modules? (currently we rely on browser caching for our 160kb blob)
+
 ## Concept
 
 EZProxy has a [Find/Replace] directive system that allows manipulation of proxied content. We use that to insert a single `<script>`-tag into every proxied page, which loads our menu code. The menu structure is generated on the fly based on (locally cached) JSON files stored on the EZProxy web server.
@@ -24,7 +46,7 @@ To get this running and deployed on your EZProxy setup, quite a bit of  (configu
 
 ### Prerequisites
 
-On your (linux/mac/cygwin) development box:
+On your (linux/mac/cygwin/WSL) development box:
 * [node] & [npm], we suggest [nvm] as well
 * [Python3] & [pip], we also suggest [virtualenv]
 * Python3 [Requests]
@@ -299,37 +321,25 @@ converted to Array elements in a Collection JSON file by grabrena.py (and parsed
 `backend/grabrena.py` uses `OrderedDict` instead of `dict` to represent JSON objects/dictionaries in Python to preserve the sequence of items received from ReNa.
 
 
-## To Do, Help Wanted:
 
-* Refactor grabrena.py until the salient parts can be used stand-alone
-* Sanitize network interactions for XSS vectors (somewhat done?)
-* Consider turning EZMenu into an SPA that loads the proxied content in an iframe (a browser plugin would create too much maintenance overhead)
-* Loading fonts from the EZProxy webserver fails due to lack of CORS headers -> SPA solution would fix that
-* Automate and document the build process more cleanly
-* Better error handling/messages
-* LocalStorage for JS modules? (currently we rely on browser caching for our 160kb blob)
-
-
-## Links
-
-* [EZproxy]: http://www.oclc.org/en-UK/ezproxy.html
-* [jQuery.mmenu]: http://mmenu.frebsite.nl/
-* [ReNa]: http://rena.mpdl.mpg.de/rena/
-* [node]: https://nodejs.org/download/
-* [npm]: https://www.npmjs.com/
-* [nvm]: https://github.com/creationix/nvm
-* [Python3]: https://www.python.org/
-* [pip]: http://www.pip-installer.org/en/latest/installing.html
-* [Requests]: http://docs.python-requests.org/
-* [virtualenv]: http://virtualenv.readthedocs.org/en/latest/
-* [JSPM]: https://jspm.io
-* [systemjs-hot-reloader]: https://github.com/capaj/systemjs-hot-reloader
-* [jspm-dev-buddy]: https://github.com/capaj/jspm-dev-buddy
-* [Atom]: https://atom.io
-* [chokidar-socket-emitter]: https://github.com/capaj/chokidar-socket-emitter
-* [Babel]: https://babeljs.io/
-* [JavaScript Promises]: http://www.html5rocks.com/en/tutorials/es6/promises/
-* [mmenu examples]: http://mmenu.frebsite.nl/examples.html
-* [Find/Replace]: http://www.oclc.org/support/services/ezproxy/documentation/cfg/find.en.html
-* [jQuery]: https://jquery.com
-* [node-sass]: https://www.npmjs.com/package/node-sass  
+[EZproxy]: http://www.oclc.org/en-UK/ezproxy.html
+[jQuery.mmenu]: http://mmenu.frebsite.nl/
+[ReNa]: http://rena.mpdl.mpg.de/rena/
+[node]: https://nodejs.org/download/
+[npm]: https://www.npmjs.com/
+[nvm]: https://github.com/creationix/nvm
+[Python3]: https://www.python.org/
+[pip]: http://www.pip-installer.org/en/latest/installing.html
+[Requests]: http://docs.python-requests.org/
+[virtualenv]: http://virtualenv.readthedocs.org/en/latest/
+[JSPM]: https://jspm.io
+[systemjs-hot-reloader]: https://github.com/capaj/systemjs-hot-reloader
+[jspm-dev-buddy]: https://github.com/capaj/jspm-dev-buddy
+[Atom]: https://atom.io
+[chokidar-socket-emitter]: https://github.com/capaj/chokidar-socket-emitter
+[Babel]: https://babeljs.io/
+[JavaScript Promises]: http://www.html5rocks.com/en/tutorials/es6/promises/
+[mmenu examples]: http://mmenu.frebsite.nl/examples.html
+[Find/Replace]: http://www.oclc.org/support/services/ezproxy/documentation/cfg/find.en.html
+[jQuery]: https://jquery.com
+[node-sass]: https://www.npmjs.com/package/node-sass  
