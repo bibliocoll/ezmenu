@@ -2,6 +2,8 @@ node_modules/
 jspm_packages/
 .sass-cache/
 dist/
+.idea/
+.vscode/
 backend/*.ini
 frontend/html/public/Robo*
 frontend/html/public/*.css
