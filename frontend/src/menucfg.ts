@@ -10,14 +10,13 @@
 // ~~~~~~~~~~~~~~~~ MAIN & COMMON ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 export const PROXY_HOSTNAME = (process.env.NODE_ENV === 'production') ? 'go.coll.mpg.de' : 'localhost';
-export const BASE_ORIGIN = (process.env.NODE_ENV === 'production') ? `https://${PROXY_HOSTNAME}` : `http://${PROXY_HOSTNAME}:5000`;
+export const BASE_ORIGIN = (process.env.NODE_ENV === 'production') ? `https://${PROXY_HOSTNAME}` : `http://${PROXY_HOSTNAME}:8080`;
 // export const BASE_URL = (process.env.NODE_ENV === 'production') ? `${BASE_ORIGIN}/` : `${BASE_ORIGIN}/demo/`;
 export const BASE_URL = `${BASE_ORIGIN}/`;
 
 // ~~~~~~~~~~~~~~~~ MENU LIB ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-// might need a (process.env.NODE_ENV === 'production') switch?
-export const IMPLANT_URL = (process.env.NODE_ENV === 'production') ? `${BASE_URL}loggedin/implant.html` : `${BASE_URL}demo_implant.html`;
+export const IMPLANT_URL = `${BASE_URL}loggedin/implant.htm`;
 
 // CSS ID of the main menu <ul>
 export const MENU_UL_ID = 'go-librecommended';
@@ -35,7 +34,7 @@ export const MENU_ERROR_HTML = `<div id='${MENU_BUTTON_ID}'><a>EZMenu Error</a><
 // CSS ID of the <iframe> housing the localStorage provider
 export const IMPLANT_ID = 'ezmenu-implant';
 // HTML added to the DOM to insert said <iframe>
-export const IMPLANTHTML = `<iframe id="${IMPLANT_ID}" src="${IMPLANT_URL}" height="1" width="0" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>`;
+export const IMPLANTHTML = `<iframe id="${IMPLANT_ID}" src="${IMPLANT_URL}" height="1" width="0"></iframe>`;
 
 // "go away" button functionality
 export const LAZY_LOAD = `${PROXY_HOSTNAME}-menu_lazy_load`;
