@@ -210,13 +210,13 @@ by http://stackoverflow.com/users/4279/j-f-sebastian
         if not self.close_file:
             return  # do nothing
         # clean up
-        exit = getattr(self.file, '__exit__', None)
-        if exit is not None:
-            return exit(*args, **kwargs)
+        exitContext = getattr(self.file, '__exit__', None)
+        if exitContext is not None:
+            return exitContext(*args, **kwargs)
         else:
-            exit = getattr(self.file, 'close', None)
-            if exit is not None:
-                exit()
+            exitContext = getattr(self.file, 'close', None)
+            if exitContext is not None:
+                exitContext()
 
     # iterator support
     def __iter__(self):
@@ -241,8 +241,8 @@ by http://stackoverflow.com/users/4279/j-f-sebastian
 
 # ~~~ FUNCTIONS ~~~
 def json_hexdigest(data):
-    '''creates a sha1 hash of the json representation of an object'''
-    newsha = hashlib.sha1()
+    '''creates a sha hash of the json representation of an object'''
+    newsha = hashlib.sha256()
     # TODO(krugar): find a way to do this without the extra encode('utf-8')
     newsha.update(json.dumps(data).encode('utf-8'))
     return newsha.hexdigest()
