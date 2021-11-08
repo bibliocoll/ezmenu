@@ -28,7 +28,7 @@ import {
  * const spaceAvailablePromise = storageEstimate.then((estimate) => estimate.quota !== undefined && estimate.quota > 0);
  */
 const lsAvailable: boolean = storageAvailable('localStorage');
-
+// console.log('localStorage available: ', lsAvailable);
 /**
  * make Window.fetch throw on http error code
  * @param {Response} response fetch response to check

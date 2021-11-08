@@ -21,7 +21,8 @@ import {
   iSetlistItem,
   storageAvailable,
 } from './common/index';
-/* @ts-ignore */
+
+/* @ts-ignore */ // we don't have a .d.ts for Mmenu
 import Mmenu from 'mmenu-js';
 
 import {
@@ -35,11 +36,7 @@ import {
   MMENU_CONFIGURATION,
   MMENU_OPTIONS,
 } from './menucfg';
-/*
-import * as data from './lslib';
-import * as menu from './menulib';
-import * as cfg from './menucfg';
-*/
+
 const lsAvailable = storageAvailable('localStorage');
 let setlist: iSetlistItem[] = [];
 
@@ -169,7 +166,7 @@ function portListener(event: MessageEvent): void {
           // if LAZY_LOAD is set, initialize the menu only after the button is clicked
           button.addEventListener('click', (ev) => initializeMenu(nav, ev), { once: true });
         } else { // otherwise, do it now
-          console.log('LAZY_LOAD not active, calling Mmenu');
+          // console.log('LAZY_LOAD not active, calling Mmenu');
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const menu = initializeMenu(nav);
         }
