@@ -4,21 +4,17 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>EZMenu Hot Reload</title>
-<script src="jspm_packages/system.js"></script>
-<script src="config.js"></script>
-<script>
-if (location.origin.match(/localhost/)) {
-  System.trace = true
-  System.import('capaj/systemjs-hot-reloader').then(function(HotReloader){
-    new HotReloader.default('http://localhost:9080')
-  })
-}
-</script>
- <script>
-   System.import('js/ezmenu/main.js');
- </script>
+ <script defer src="loggedin/mmenu.js"></script>
+ <script defer src="loggedin/vendors-node_modules_webpack-dev-server_client_index_js_protocol_ws_3A_hostname_0_0_0_0_port_-fb8196.js"></script>
+ <script defer src="loggedin/node_modules_css-loader_dist_runtime_api_js-node_modules_css-loader_dist_runtime_getUrl_js-no-2d2b54.js"></script>
+ <script defer src="loggedin/frontend_src_common_SetlistItem_ts-frontend_src_common_index_ts.js"></script>
+ <script defer src="loggedin/injectmenu.js"></script>
 </head>
 <body>
-EZMenu Hot Reload dev page.
+<div id="main">
+ <h1>EZMenu demo page</h1>
+ <p>MMenu really likes it if the entire page content is inside a div, because it can slide that div to the side when the menu appears</p>
+</div>
+this text is directly part of the body tag and not wrapped inside any element, it will vanish when the menu slides out (but reappear when the menu hides)
 </body>
 </html>
