@@ -65,7 +65,7 @@ Git clone this repository, and then open a shell in the newly created directory 
 
 `npm install`
 
-this will install [JSPM] and pull in all the project dependencies from npm and github (via running `jspm install` in the npm `postinstall` hook, mostly). We're using `node-sass` to compile SASS to CSS, if you're on Windows and get compilation errors during installation, check for help under [node-sass].
+this will install [JSPM] and pull in all the project dependencies from npm and GitHub (via running `jspm install` in the npm `postinstall` hook, mostly). We're using `node-sass` to compile SASS to CSS, if you're on Windows and get compilation errors during installation, check for help under [node-sass].
 
 Once that is complete, you can run:
 
@@ -85,9 +85,9 @@ We'll get you started with an overview of the frontend/menu code next, then expl
 The interface is based on [jQuery.mmenu], and we populate the menu with content loaded from JSON files. The expected format of these files is documented at the end of this document under Data Types, and codified in the ES6 class definitions for `SetlistItem` and `SetlistDataCollectionItem` in `frontend/js/ezmenu/ezmenuclasses.js`, which also hold the code that transforms each data item into the DOM elements that form a menu entry. `frontend/js/ezmenu/menulib.js` handles high-level menu-building and mainly concerns itself with looping over Arrays and displaying errors.
 
 The JSON files are expected to be placed in the `loggedin/` directory of the EZProxy internal web server, and they are queried by our script as follows:
-First, the file `setlist.json` is fetched. It contains an Array of `SetlistItem`s with titles, IDs/filenames and timestamps for each category to be added to the menu, and if this download succeeds, HTML list items are generated for each and the jQuery.mmenu is initialized. The Setlist should be less than 1KB in size and is fetched each time the menu is generated.
+First, the file `setlist.json` is fetched. It contains an Array of `SetlistItem`s with titles, IDs/filenames and timestamps for each category to be added to the menu, and if this download succeeds, HTML list items are generated for each and the jQuery.mmenu is initialized. The Setlist should be less than 1 kB in size and is fetched each time the menu is generated.
 
-Then the script will check `localStorage` for entries representing the content of each collection represented by a `SetlistItem`, and if present, compare timestamps with the freshly downloaded Setlist. If the local data is still up to date, it is used, otherwise the corresponding JSON file will be downloaded from the EZProxy web server (and later stored in localStorage).
+Then the script will check `localStorage` for entries representing the content of each collection represented by a `SetlistItem`, and if present, compare timestamps with the freshly downloaded Setlist. If the local data is still up-to-date, it is used, otherwise the corresponding JSON file will be downloaded from the EZProxy web server (and later stored in localStorage).
 Either way, once available, sub-menus are generated and filled with entries defined by `SetlistDataCollectionItem`s. We currently do not support sub-sub-menus.
 
 Since this menu is to be injected into proxied-by-hostname pages (which reside at subdomains like http://journal.domain.name.YOUR-EZPROXY.TLD) and localStorage is governed by browser same-origin rules (which mandate _fully_ matching hostnames), the localStorage part of this script resides inside an iframe. This iframe always loads the same URL and thus has access to the same localStorage location, no matter what page/subdomain the main script is injected into.
@@ -106,7 +106,7 @@ Open `frontend/js/ezmenu/menucfg.js` in your editor and search for 'XXX' to find
 
 Note that the demo page will likely fail once you have edited and saved the file, as it will then no longer look for the JSON files in the demo folder, but on your EZProxy webserver (and be denied access unless you are currently logged in there), so you may want to switch back to http and localhost for local testing.
 
-Also note that you will have to do this switch each time you want create a deployment-ready build. If you come up with a clean and simple way to separate the production setup from the local testing setup, please submit a pull request.
+Also note that you will have to do this switch each time you mean to create a deployment-ready build. If you come up with a clean and simple way to separate the production setup from the local testing setup, please submit a pull request.
 
 
 ### Frontend Deployment
@@ -124,7 +124,7 @@ this will run `tooling/build.sh`, which creates a `dist/` folder for you, the co
 
 ### Frontend Injection
 
-To get our menu into a proxied page, we need to add a `<script>` tag to the HTML of that page. We're using the EZProxy [Find/Replace] directive to that end. EZproxy resources are configured as _config.txt Database Stanzas_ and we need to append our Find/Replace code to each and every one of them.
+To get our menu into a proxied page, we need to add a `<script>` tag to the HTML of that page. We're using the EZProxy [Find/Replace] directive to that end. EZproxy resources are configured as _config.txt Database Stanzas_, and we need to append our Find/Replace code to all of them.
 
 During testing, we've found some websites that contain `'</head>'` as part of a string inside a `<script>` tag. To prevent our [Find/Replace] code from being triggered by that, we make use of _states_ to ensure we only inject our `<script>` tag before the closing `</head>` tag of the HTML actually being rendered, and not into some JavaScript string. This leads to a rather long-ish addendum to each _Stanza_:
 ```
@@ -146,7 +146,7 @@ You _could_ add this to each Stanza by hand, but `backend/grabrena.py` contains 
 
 You can find our Regular Expression that tries to identify a _Stanza_ [here](backend/grabrena.py#L177).
 
-> __Aside__: For various reasons, the jQuery library claims two identifiers in the JavaScript global/window namespace for itself (`jQuery` and `$`), even when loaded as a module. The way jQuery implements `.noConflict(true)`, the mechanism by which it releases these identifiers again, creates a minimal timeframe during which the global identifiers will point to our injected version, no matter what we do. Due to the parallelism inherent in Browser script execution, this can lead to to our injection non-deterministically breaking sites: _while our version of jQuery temporarily holds the global identifiers_, code from the site may attempt to use certain aspects of their own version of jQuery via the global identifiers (ie: old API calls, plugins) that are not present in our version, or even worse, register plugins, which will then be inaccessible once we've handed the identifiers back via `.noConflict(true)`.
+> __Aside__: For various reasons, the jQuery library claims two identifiers in the JavaScript global/window namespace for itself (`jQuery` and `$`), even when loaded as a module. The way jQuery implements `.noConflict(true)`, the mechanism by which it releases these identifiers again, creates a minimal timeframe during which the global identifiers will point to our injected version, no matter what we do. Due to the parallelism inherent in Browser script execution, this can lead to our injection non-deterministically breaking sites: _while our version of jQuery temporarily holds the global identifiers_, code from the site may attempt to use certain aspects of their own version of jQuery via the global identifiers (ie: old API calls, plugins) that are not present in our version, or even worse, register plugins, which will then be inaccessible once we've handed the identifiers back via `.noConflict(true)`.
 
 ## Backend
 
@@ -163,7 +163,7 @@ The reasoning behind using ReNa data for the menu structure is based on the fact
 
 Find `backend/grabrena.py`, and run it once. It will do nothing but create a `grabreny.ini` in the same directory, which contains all configurable values with more-or-less sensible defaults and explanations.
 
-> This script is a horrible monolithic mess and we would like to apologize in advance to anyone who needs to break it open and salvage it for usable parts. Pull Requests with a modular structure and a proper separation of concerns are very welcome.
+> This script is a horrible monolithic mess, and we would like to apologize in advance to anyone who needs to break it open and salvage it for usable parts. Pull Requests with a modular structure and a proper separation of concerns are very welcome.
 
 With that said, here's what the script does:
 * (optionally) Run `svn up` on a pre-existing svn repository tracking the  eResources.txt repo the MPDL provides
@@ -196,7 +196,7 @@ In `config.txt`, you can now reference the RenaOnly group and allow it to access
 Group RenaOnly
 Title ReNa
 MimeFilter application/json .* javascript
-URL http://rena.mpdl.mpg.de
+URL https://rena.mpdl.mpg.de
 HJ rena.mpdl.mpg.de
 HJ https://rena.mpdl.mpg.de
 
@@ -209,7 +209,7 @@ If you have a multi-tiered user setup, you should be able to adapt this to your 
 
 #### Restarting EZProxy on changes
 
-To make this work without running grabrena.py as root (which we disencourage), EZProxy needs to run on non-priviledged ports so it can be (re)started by a non-root user. Change your `config.txt` to something akin to this:
+To make this work without running grabrena.py as root (which we discourage), EZProxy needs to run on non-priviledged ports, so it can be (re)started by a non-root user. Change your `config.txt` to something akin to this:
 ```
 RunAs someuser:someuser
 
@@ -257,7 +257,7 @@ injection_url: https://YOUR-EZPROXY.TLD/loggedin/injectmenu.js
 
 We have attempted to mitigate against the most obvious XSS vectors in our JavaScript, but we would love some extra sets of eyes on that front.
 
-`nsp check` and `snyk test` identified two upstream problems within secondary depencencies, which we reported. Both are located in the ES6 transpiler toolchain and should not be of consequence to the production code.
+`nsp check` and `snyk test` identified two upstream problems within secondary depencencies, which we reported. Both are located in the ES6 transpiler toolchain and should not be of consequence for the production code.
 
 ## Data Formats
 

@@ -59,7 +59,7 @@ const GOSIFY = [
 // the first string is part of an example addon, see coll_lib.js
 const LINKS = [
   `<abbr title="Reloads this page with the GO menu disabled, hopefully leaving you with an un-broken page"><a href="#" id="${GO_AWAY_ID}">"go away"</a></abbr>`,
-  '<a href="http://www.coll.mpg.de" target="_blank">COLL</a>',
+  '<a href="https://www.coll.mpg.de" target="_blank">COLL</a>',
   `<a href="${BASE_URL}logout">logout</a>`,
 ];
 
@@ -67,7 +67,7 @@ const LINKS = [
 // Array holding a single string with HTML that will be added as a centered navbar to mmenu.
 // contains a search field + button
 const CORE_SEARCH = [
-  '<form method="GET" action="http://core.coll.mpg.de/Search/Results" name="searchForm" id="searchForm" class="core-search">'
+  '<form method="GET" action="https://core.coll.mpg.de/Search/Results" name="searchForm" id="searchForm" class="core-search">'
     + '<input id="lookfor" name="lookfor" value="" placeholder="Search in CORE" type="text">'
     + '<input id="defaultSearchButton" name="submitButton" value="GO" type="submit"></form>',
 ];
@@ -83,7 +83,7 @@ export const MMENU_OPTIONS = {
   },
   // edit this to change the "title bar" of the menu
   navbar: {
-    title: "<a href='http://go.coll.mpg.de'>'GO' Resource Proxy</a>",
+    title: "<a href='https://go.coll.mpg.de'>'GO' Resource Proxy</a>",
   },
   // these are additional navbars, listed from top to bottom
   navbars: [
