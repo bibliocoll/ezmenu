@@ -17,7 +17,7 @@ import {
   arrayFromSaneData,
   createSetlistCollectionItem,
   createSetlistItem,
-  domReady,
+  domReady, hasProp,
   iSetlistItem,
   storageAvailable,
 } from './common/index';
@@ -211,4 +211,6 @@ domReady().then(() => {
   iframe.src = IMPLANT_URL;
   iframe.setAttribute('style', 'display:none;');
   document.body.appendChild(iframe);
-});
+}).catch(err => hasProp(err,  'message') ?
+    console.warn(err.message) :
+    console.warn('injectmenu main Promise rejected without Error object, dumping:', err));

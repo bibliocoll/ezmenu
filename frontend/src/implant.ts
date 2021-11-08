@@ -11,7 +11,7 @@
 import {
   arrayFromSaneData,
   createSetlistItem,
-  domReady,
+  domReady, hasProp,
   iSetlistItem,
   storageAvailable,
 } from './common/index';
@@ -201,10 +201,11 @@ domReady().then(() => {
           }
         }
       });
-    })
-    .catch(console.log);
+    }).catch(console.warn);
   // TODO: unload everything?
-});
+}).catch(err => hasProp(err,  'message') ?
+    console.warn(err.message) :
+    console.warn('implant main Promise rejected without Error object, dumping:', err));
 
 /**
  * OK, so I wanted to place something into the window.postMessage that the parent frame can recognize as unlikely
