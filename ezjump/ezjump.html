@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="ezjump.js"></script>
+<head>
+    <style>
+        input.valid {
+            background-color: lightgreen;
+        }
+    </style>
+    <title>EZJump demo</title>
+</head>
+<body>
+<!-- The form action needs to point to the EZProxy login URL -->
+<form method="GET" action="./login" name="gosify" id="gosifyForm" class="core-search">
+    <input id="gosifyURL" name="url" value="" placeholder="Paste URL here to open it via EZProxy" type="text">
+    <input id="gosifyButton" value="GOsify!" type="submit">
+</form>
+<script type="text/javascript">
+    registerEzJumpHandlers('gosifyForm', 'gosifyURL');
+</script>
+</body>
+</html>
+
