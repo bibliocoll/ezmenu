@@ -5,9 +5,9 @@
   "main": "frontend/src/index.js",
   "private": true,
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --config tooling/webpack.config.js",
-    "build-dev": "cross-env NODE_ENV=development webpack --config tooling/webpack.config.js",
-    "start": "cross-env NODE_ENV=development webpack serve --config tooling/webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "build-dev": "cross-env NODE_ENV=development webpack --config webpack.config.js",
+    "start": "cross-env NODE_ENV=development webpack serve --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
