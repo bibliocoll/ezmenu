@@ -11,7 +11,6 @@
 
 export const PROXY_HOSTNAME = (process.env.NODE_ENV === 'production') ? 'go.coll.mpg.de' : 'localhost';
 export const BASE_ORIGIN = (process.env.NODE_ENV === 'production') ? `https://${PROXY_HOSTNAME}` : `http://${PROXY_HOSTNAME}:8080`;
-// export const BASE_URL = (process.env.NODE_ENV === 'production') ? `${BASE_ORIGIN}/` : `${BASE_ORIGIN}/demo/`;
 export const BASE_URL = `${BASE_ORIGIN}/`;
 
 // ~~~~~~~~~~~~~~~~ MENU LIB ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -24,17 +23,12 @@ export const MENU_UL_ID = 'go-librecommended';
 export const MENU_NAV_ID = 'ezmenu-menu';
 // CSS ID of the button that unhides the menu
 export const MENU_BUTTON_ID = 'ezmenu-button';
-// HTML added to the DOM to house the menu, you can e.g. change the label of the button here
-export const MENU_HTML = `<nav id='${MENU_NAV_ID}'><ul id='${MENU_UL_ID}'></ul></nav>`
-  + `<div id='${MENU_BUTTON_ID}'><a href='#${MENU_NAV_ID}'>GO</a></div>`;
 
 // HTML added to the DOM in case fetching setlist.json fails
 // TODO(krugar): make this pretty
 export const MENU_ERROR_HTML = `<div id='${MENU_BUTTON_ID}'><a>EZMenu Error</a></div>`;
 // CSS ID of the <iframe> housing the localStorage provider
 export const IMPLANT_ID = 'ezmenu-implant';
-// HTML added to the DOM to insert said <iframe>
-export const IMPLANTHTML = `<iframe id="${IMPLANT_ID}" src="${IMPLANT_URL}" height="1" width="0"></iframe>`;
 
 // "go away" button functionality
 export const LAZY_LOAD = `${PROXY_HOSTNAME}-menu_lazy_load`;
@@ -42,23 +36,23 @@ export const GO_AWAY_ID = 'please_just_go_away';
 
 // part of an example addon, see coll_lib.js
 // array of form element ids that should have the gosify handlers applied
-export const GOSIFY_FORM_ID_ARRAY = ['gosifyForm', 'gosifyForm2'];
+export const EZJUMP_FORM_ID_ARRAY = ['ezjumpForm', 'ezjumpForm2'];
 // name of the text input element inside that form // FIXME: this should be an array, too
-export const GOSIFY_INPUT_ID = 'gosifyURL';
+export const EZJUMP_INPUT_ID = ['ezjumpURL', 'ezjumpURL2'];
 // CSS class to toggle on if the text input contains a valid URL
-export const GOSIFY_VALID_CLASS = 'valid';
+export const EZJUMP_VALID_CLASS = 'valid';
 
-const GOSIFY = [
-  `<form method="GET" action="${BASE_URL}login" name="gosify" id="${GOSIFY_FORM_ID_ARRAY[0]}" class="core-search">
-  <input id="${GOSIFY_INPUT_ID}" name="url" value="" placeholder="Paste URL here to open it via GO" type="text">
-  <input id="gosifyButton" value="GOsify!" type="submit"></form>`,
+const EZJUMP = [
+  `<form method="GET" action="${BASE_URL}login" name="gosify" id="${EZJUMP_FORM_ID_ARRAY[0]}" class="core-search">
+  <input id="${EZJUMP_INPUT_ID[0]}" name="url" value="" placeholder="Paste URL here to open it via EZProxy" type="text">
+  <input id="ezjumpButton" value="EZJump!" type="submit"></form>`,
 ];
 
 // Example array holding three strings with HTML, added as a navbar to mmenu.
 // feel free to remove/edit this to your needs
 // the first string is part of an example addon, see coll_lib.js
 const LINKS = [
-  `<abbr title="Reloads this page with the GO menu disabled, hopefully leaving you with an un-broken page"><a href="#" id="${GO_AWAY_ID}">"go away"</a></abbr>`,
+  `<abbr title="Reloads this page with the EZMenu disabled, hopefully leaving you with an un-broken page"><a href="#" id="${GO_AWAY_ID}">"go away"</a></abbr>`,
   '<a href="https://www.coll.mpg.de" target="_blank">COLL</a>',
   `<a href="${BASE_URL}logout">logout</a>`,
 ];
@@ -83,7 +77,7 @@ export const MMENU_OPTIONS = {
   },
   // edit this to change the "title bar" of the menu
   navbar: {
-    title: "<a href='https://go.coll.mpg.de'>'GO' Resource Proxy</a>",
+    title: "<a href='https://YOUR-EZPROXY.TLD/'>'EZMenu' Resource Proxy</a>",
   },
   // these are additional navbars, listed from top to bottom
   navbars: [
@@ -92,7 +86,7 @@ export const MMENU_OPTIONS = {
       content: ['prev', 'title', 'close'],
     },
     {
-      content: GOSIFY,
+      content: EZJUMP,
     },
     {
       content: ['searchfield'],

@@ -22,11 +22,13 @@ import {
   storageAvailable,
 } from './common/index';
 
+import registerEzJumpHandlers from "./ezjump";
+
 /* @ts-ignore */ // we don't have a .d.ts for Mmenu
 import Mmenu from 'mmenu-js';
 
 import {
-  BASE_ORIGIN, GO_AWAY_ID,
+  BASE_ORIGIN, GO_AWAY_ID, EZJUMP_FORM_ID_ARRAY, EZJUMP_INPUT_ID, EZJUMP_VALID_CLASS,
   IMPLANT_ID,
   IMPLANT_URL,
   LAZY_LOAD,
@@ -169,6 +171,9 @@ function portListener(event: MessageEvent): void {
           // console.log('LAZY_LOAD not active, calling Mmenu');
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const menu = initializeMenu(nav);
+          // attach handlers to EZJump forms
+          EZJUMP_FORM_ID_ARRAY.forEach((formId, i) => registerEzJumpHandlers(formId, EZJUMP_INPUT_ID[i], EZJUMP_VALID_CLASS)
+          )
         }
       }
     }
