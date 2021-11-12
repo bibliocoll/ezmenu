@@ -5,7 +5,7 @@ _use EZProxy with style_
 
 This repository contains our custom UI for OCLC's [EZProxy].
 
-Links to proxied resources are presented in a [jQuery.mmenu],
+Links to proxied resources are presented in a [MMenu],
 which is injected into all pages visited via the proxy server.
 
 
