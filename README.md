@@ -11,6 +11,7 @@ which is injected into all pages visited via the proxy server.
 
 ## Version History
 
+* 0.2.0: Typescript/webpack5 rewrite, no more jQuery, EZJump (Q4 2021)
 * 0.1.3: ReNa-Backend uses JSON instead of JSONP (Q2 2019)
 * 0.1.2: demo server (Q3 2016)
 * 0.1.1: dependency updates, some css changes (Q3 2016)
@@ -18,18 +19,20 @@ which is injected into all pages visited via the proxy server.
 
 ### Planned changes
 
-* 0.1.4: ReNa v4 compatibility (Q2 2019)
-* 0.1.5: use the no-jQuery version of `mmenu` (sometime 2019)
-
+* none currently
 
 ### To Do, Help Wanted:
 
 * Refactor grabrena.py until the salient parts can be used stand-alone
 * Sanitize network interactions for XSS vectors (somewhat done?)
 * Loading fonts from the EZProxy webserver fails due to lack of CORS headers
-* Automate and document the build process more cleanly, or rather: migrate to another build toolchain before jspm dies of bitrot
+* document the build process better
 * Better error handling/messages
 * LocalStorage for JS modules? (currently we rely on browser caching for our 160kb blob)
+
+### New: EZJump
+
+We've built a little demo for the EZJump form, for those that just want to use that without the menu, see `ezjump/`
 
 ## Concept
 
@@ -56,7 +59,7 @@ Later, on your EZProxy box:
 * [Python3]
 * Python3 [Requests]
 
-The client part of this project is written in ES6 Javascript and SASS. Both languages are not (yet) natively supported by web browsers and need to be compiled into ES5 Javascript and CSS, respectively. We have tooling in place to do this for you, but please keep this in mind while working with the code.
+The client part of this project is written in Typescript and SASS. Both languages are not (yet) natively supported by web browsers and need to be compiled into (ES6) Javascript and CSS, respectively. We have tooling in place to do this for you, but please keep this in mind while working with the code.
 
 
 ### Getting all the parts together
@@ -65,49 +68,46 @@ Git clone this repository, and then open a shell in the newly created directory 
 
 `npm install`
 
-this will install [JSPM] and pull in all the project dependencies from npm and GitHub (via running `jspm install` in the npm `postinstall` hook, mostly). We're using `node-sass` to compile SASS to CSS, if you're on Windows and get compilation errors during installation, check for help under [node-sass].
+this will pull in all the project dependencies from npm. We're using `dart-sass` to compile SASS to CSS.
 
 Once that is complete, you can run:
 
 `npm start`
 
-in the project directory to start a local web server with a little demo page (navigate to http://localhost:8000 to see it). It will be really slow, but you should see a blue "GO"-button to the lower left of your screen.
+in the project directory to start a local web server with a little demo page (navigate to http://localhost:8080 to see it). It will be really slow, but you should see a blue "GO"-button to the lower left of your screen.
 
-While `npm start` is running, [node-sass] is watching `frontend/sass/loggedin/menu.sass` and any changes made will be compiled into `demo/menu.css`. You will need to F5 the browser to see your changes, but you can use this setup to adjust the styles to your liking. The demo page also runs [sytemjs-hot-reloader], so you can use [jspm-dev-buddy] for [Atom] or [chokidar-socket-emitter] in general if you want to work on the ES6 JavaScript and see your changes transpiled with [Babel] and updated into the browser without reloading manually.
+While `npm start` is running, [webpack5] is watching the TypeScript and SASS files in `frontend/src` and `frontend/sass/`, and any changes made will be reflected in the demo webserver. Note that `webpack-dev-server` does not write anything to disk. The files in the `demo` directory are just scaffolding, best not edit them (but feel free to look at them, of course).
 
 We'll get you started with an overview of the frontend/menu code next, then explain the configuration options and deployment.
 
 
 ## Frontend
 
-> __Preface__: It is not required to understand the code to get this running on your installation, but in case you're curious, take a look at the files in `frontend/js/ezmenu/` while you read this chapter (start with `frontend/js/ezmenu/main.js`). If you're familiar with JavaScript but new to Promises, [JavaScript Promises] should have you covered. If you do not care for the code, please do skim this chapter regardless, as it contains explanations that you will likely need to take into consideration later.
+> __Preface__: It is not required to understand the code to get this running on your installation, but in case you're curious, take a look at the files in `frontend/src/` while you read this chapter (start with `frontend/src/index.ts`). If you're familiar with JavaScript but new to Promises, [JavaScript Promises] should have you covered. If you do not care for the code, please do skim this chapter regardless, as it contains explanations that you will likely need to take into consideration later.
 
-The interface is based on [jQuery.mmenu], and we populate the menu with content loaded from JSON files. The expected format of these files is documented at the end of this document under Data Types, and codified in the ES6 class definitions for `SetlistItem` and `SetlistDataCollectionItem` in `frontend/js/ezmenu/ezmenuclasses.js`, which also hold the code that transforms each data item into the DOM elements that form a menu entry. `frontend/js/ezmenu/menulib.js` handles high-level menu-building and mainly concerns itself with looping over Arrays and displaying errors.
+The interface is based on [MMenu], and we populate the menu with content loaded from JSON files. The expected format of these files is documented at the end of this document under Data Types, and codified in the class definitions in `SetlistItem.ts` and `SetlistCollectionItem.ts` in `frontend/src/common/`, which also hold the code that transforms each data item into the DOM elements that form a menu entry.
 
 The JSON files are expected to be placed in the `loggedin/` directory of the EZProxy internal web server, and they are queried by our script as follows:
-First, the file `setlist.json` is fetched. It contains an Array of `SetlistItem`s with titles, IDs/filenames and timestamps for each category to be added to the menu, and if this download succeeds, HTML list items are generated for each and the jQuery.mmenu is initialized. The Setlist should be less than 1 kB in size and is fetched each time the menu is generated.
+First, the file `setlist.json` is fetched. It contains an Array of `SetlistItem`s with titles, IDs/filenames and timestamps for each category to be added to the menu. The Setlist should be less than 1 kB in size and is fetched each time the menu is generated. 
 
 Then the script will check `localStorage` for entries representing the content of each collection represented by a `SetlistItem`, and if present, compare timestamps with the freshly downloaded Setlist. If the local data is still up-to-date, it is used, otherwise the corresponding JSON file will be downloaded from the EZProxy web server (and later stored in localStorage).
-Either way, once available, sub-menus are generated and filled with entries defined by `SetlistDataCollectionItem`s. We currently do not support sub-sub-menus.
+Either way, once all files are either available or the download attempts have timed out,
+a HTML `<nav>`-Element containing a two-level tree structure of list items representing the menu content is generated, and [MMenu] is initialized on that structure. 
+ > We currently do not support sub-sub-menus, simply because no-one has asked for that feature. There's probably only some type-system magic to be performed to allow this.
 
-Since this menu is to be injected into proxied-by-hostname pages (which reside at subdomains like http://journal.domain.name.YOUR-EZPROXY.TLD) and localStorage is governed by browser same-origin rules (which mandate _fully_ matching hostnames), the localStorage part of this script resides inside an iframe. This iframe always loads the same URL and thus has access to the same localStorage location, no matter what page/subdomain the main script is injected into.
-`frontend/js/ezmenu/lslib.js` facilitates the communication with that iframe for the main script, while `frontend/js/ez_implant/main.js` holds the code that runs inside the iframe. Both scripts communicate via the `window.postMessage()` API to ferry menu content from the iframe to the UI building parts of the script. Since older versions of IE can only transfer strings via postMessage(), `ezmenu/lslib.js` is tasked with deserializing and sanity checking the JSON data the iframe fetches and stores.
+
+Since this menu is to be injected into proxied-by-hostname pages (which reside at subdomains like http://journal.domain.name.YOUR-EZPROXY.TLD) and localStorage is governed by browser same-origin rules (which mandate _fully_ matching hostnames), the localStorage part of this script resides inside an iframe. This iframe always loads the same URL and thus has access to the same localStorage location, no matter what page/subdomain the main script is injected into. `frontend/src/implant.ts` holds the code that runs inside the iframe. Both scripts communicate via the [Channel Messaging API] to ferry menu content from the iframe to the UI building parts of the script. 
 
 Please note that privacy enhancing browser plugins or settings can prevent this setup from executing. You should educate users to make sure that all proxy-by-hostname subdomains allow opening an iframe to https://YOUR-EZPROXY.TLD with running JavaScript inside. Also, disallowing localStorage (or using a browser without a localStorage implementation) will result in more network load and thus a slower UI experience.
 
 
 ### Frontend Configuration
 
-At the very least, you will have to tell this script the hostname of your EZProxy installation, but you might also want to switch out the search form for your own and so on. You could also take a moment to browse [mmenu examples] to get a feel for what else is possible with the menu. If your list of resources is sorted alphabetically, there is some visual sugar you might want to use (look for lines commented out in `frontend/js/ezmenu/menucfg.js`)
+At the very least, you will have to tell this script the hostname of your EZProxy installation, but you might also want to switch out the search form for your own and so on. You could also take a moment to browse [mmenu examples] to get a feel for what else is possible with the menu. If your list of resources is sorted alphabetically, there is some visual sugar you might want to use (look for lines commented out in `frontend/src/menucfg.ts`)
 
 We do not require you to keep the copyright notice at the bottom of the menu, we mainly put it there to prevent users from triggering bottom-of-screen interactions while using the menu (this does not mean you are not bound by the (A)GPL when using our code).
 
-Open `frontend/js/ezmenu/menucfg.js` in your editor and search for 'XXX' to find the three spots you will have to edit to make the script ready for deployment on your EZProxy installation. Please refer to the comment fields in that file for additional explanations.
-
-Note that the demo page will likely fail once you have edited and saved the file, as it will then no longer look for the JSON files in the demo folder, but on your EZProxy webserver (and be denied access unless you are currently logged in there), so you may want to switch back to http and localhost for local testing.
-
-Also note that you will have to do this switch each time you mean to create a deployment-ready build. If you come up with a clean and simple way to separate the production setup from the local testing setup, please submit a pull request.
-
+Open `frontend/src/menucfg.ts` in your editor and search for 'XXX' to find the three spots you will have to edit to make the script ready for deployment on your EZProxy installation. Please refer to the comment fields in that file for additional explanations.
 
 ### Frontend Deployment
 
@@ -119,7 +119,7 @@ Stop the `npm start` process (`CTRL-C` in the console), edit the 'XXX'-marked sp
 
 `npm run build`
 
-this will run `tooling/build.sh`, which creates a `dist/` folder for you, the contents of which you can drop into the 'docs/' directory of your EZProxy server. The menu JavaScript will be minified by `jspm bundle-sfx` so everything needed resides in a single javascript file.
+this will run `webpack` in production mode, which creates a `dist/` folder for you, the contents of which you can drop into the 'docs/' directory of your EZProxy server.
 
 
 ### Frontend Injection
@@ -146,16 +146,14 @@ You _could_ add this to each Stanza by hand, but `backend/grabrena.py` contains 
 
 You can find our Regular Expression that tries to identify a _Stanza_ [here](backend/grabrena.py#L177).
 
-> __Aside__: For various reasons, the jQuery library claims two identifiers in the JavaScript global/window namespace for itself (`jQuery` and `$`), even when loaded as a module. The way jQuery implements `.noConflict(true)`, the mechanism by which it releases these identifiers again, creates a minimal timeframe during which the global identifiers will point to our injected version, no matter what we do. Due to the parallelism inherent in Browser script execution, this can lead to our injection non-deterministically breaking sites: _while our version of jQuery temporarily holds the global identifiers_, code from the site may attempt to use certain aspects of their own version of jQuery via the global identifiers (ie: old API calls, plugins) that are not present in our version, or even worse, register plugins, which will then be inaccessible once we've handed the identifiers back via `.noConflict(true)`.
 
 ## Backend
 
 To populate the menu with links, JSON files need to be placed in the `loggedin/` directory of the EZProxy web server. The names are required to be `setlist.json`
-for the definitions of the first level of the menu, and an alphanumeric `id` of each submenu plus `.json` for the definitions of each submenu. Please see Data Types below for details and the `demo/` folder for examples.
+for the definitions of the first level of the menu, and an alphanumeric `id` of each submenu plus `.json` for the definitions of each submenu. Please see Data Types below for details and the `demo/loggedin/` folder for examples.
 
-This is probably the part where you will have to put in the most work yourself, unless you are a library of a Max Planck institute and you have configured resource collections on the [ReNa] VuFind installation ("predefined sets" in Aleph parlance).
-If you are one of the lucky few that fit the description, `backend/grabrena.py`
-can get all "folders"/collections you have configured on ReNa and create the required JSON files from these.
+This is probably the part where you will have to put in the most work yourself, unless you are a library of a Max Planck institute and you have configured resource collections on the [ReNa] VuFind installation ("predefined sets").
+If you are one of the lucky few that fit the description, `backend/grabrena.py` can get all "folders"/collections you have configured on ReNa and create the required JSON files from these.
 
 The reasoning behind using ReNa data for the menu structure is based on the fact that the EZproxy configuration "thinks" in webservers, while users are more likely to think in journal collections, databases or search engines, which usually are not quite congruent with each other (some websites hold spades of journal collections). A menu based on the EZproxy _Stanzas_ would be accurate, but less user-friendly. ReNa also sports descriptions and indexing fields we can use.
 
@@ -256,8 +254,7 @@ injection_url: https://YOUR-EZPROXY.TLD/loggedin/injectmenu.js
 ## Security
 
 We have attempted to mitigate against the most obvious XSS vectors in our JavaScript, but we would love some extra sets of eyes on that front.
-
-`nsp check` and `snyk test` identified two upstream problems within secondary depencencies, which we reported. Both are located in the ES6 transpiler toolchain and should not be of consequence for the production code.
+At the time of writing, [snyk] did not report any issues in our code or dependencies.
 
 ## Data Formats
 
@@ -323,7 +320,7 @@ converted to Array elements in a Collection JSON file by grabrena.py (and parsed
 
 
 [EZproxy]: http://www.oclc.org/en-UK/ezproxy.html
-[jQuery.mmenu]: http://mmenu.frebsite.nl/
+[MMenu]: http://mmenu.frebsite.nl/
 [ReNa]: http://rena.mpdl.mpg.de/rena/
 [node]: https://nodejs.org/download/
 [npm]: https://www.npmjs.com/
@@ -332,14 +329,10 @@ converted to Array elements in a Collection JSON file by grabrena.py (and parsed
 [pip]: http://www.pip-installer.org/en/latest/installing.html
 [Requests]: http://docs.python-requests.org/
 [virtualenv]: http://virtualenv.readthedocs.org/en/latest/
-[JSPM]: https://jspm.io
-[systemjs-hot-reloader]: https://github.com/capaj/systemjs-hot-reloader
-[jspm-dev-buddy]: https://github.com/capaj/jspm-dev-buddy
-[Atom]: https://atom.io
-[chokidar-socket-emitter]: https://github.com/capaj/chokidar-socket-emitter
-[Babel]: https://babeljs.io/
 [JavaScript Promises]: http://www.html5rocks.com/en/tutorials/es6/promises/
 [mmenu examples]: http://mmenu.frebsite.nl/examples.html
 [Find/Replace]: http://www.oclc.org/support/services/ezproxy/documentation/cfg/find.en.html
-[jQuery]: https://jquery.com
-[node-sass]: https://www.npmjs.com/package/node-sass  
+[webpack5]: https://webpack.js.org/concepts/ 
+[sass]: https://www.npmjs.com/package/sass  
+[snyk]: https://snyk.io/product/open-source-security-management/
+[Channel Messaging API]: https://developer.mozilla.org/en-US/docs/Web/API/Channel_Messaging_API
